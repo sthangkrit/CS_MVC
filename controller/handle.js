@@ -1,79 +1,91 @@
 var sql = require("mssql");
 // var moment = require('moment')
+const fs = require('fs')
 
-// config for your database
-var config = {
-    user: 'sa',
-    password: 'P@d0rU123',
-    server: '167.71.200.91',
-    database: 'sthangDB'
-};
+const data = require('../db')
 
-// connect to your database
-var errdb = sql.connect(config)
-if (errdb) {
-    console.log(errdb);
-}
 
 class request {
 
-    async Deposit(req) {
-        let functionName = '[Deposit]' //ชื่อ function
+    login(req) {
 
-        return new Promise(async function (resolve, reject) {
-
-            try {
-
-                var request = new sql.Request();
-                var acount = req.acount
-                // console.log(acount)
-                var acount_id = req.acount_id
-                var deposit = req.deposit
-                var statusCode = 0;
-                var massage = ""
-                var check = `SELECT acount, acount_id
-FROM sthangDB.dbo.BankAcount WHERE acount = '${acount}' AND acount_id ='${acount_id}'; `
-                var result = await request.query(check);
-                // console.log(result.recordset[0])
-                if ((result.recordset[0]) == undefined) {
-                    statusCode = 400
-                    massage = "Deposit Fail : acount or acount_id is incorect"
-                } else {
-                    if (deposit >= 100) {
-
-                        var command = `UPDATE sthangDB.dbo.BankAcount
-                SET balance+= '${deposit}' WHERE acount = '${acount}' AND acount_id =  '${acount_id}';`
-                        await request.query(command); //ยิง command เข้าไปใน
-                        statusCode = 200
-                        massage = "Deposit Success : Your Deposit " + deposit + " to Wallet"
-
-                    } else {
-                        statusCode = 400
-                        massage = "Deposit Fail : Minimum Deposit is 100 Bath"
-                    }
-                }
+        try {
 
 
+            var id = req.id
+            var pass = req.password
+
+            var acount = data.find(data => data.id === id)
+
+            if (acount.password != pass) {
                 let message = {
-                    statusCode: statusCode,
-                    message: massage
+                    statusCode: 400,
+                    message: "Wrong password"
                 }
+                return (message)
+            }
 
-                resolve(message)
-            } catch (err) {
-                let messageError = {
-                    statusCode: err.statusCode || 400,
-                    message: err.message || `${functionName} CREATE failed [Error] ${err}`
+            var index = data.findIndex(data => data.id === id)
+
+            console.log(index)
+
+            var update = data[index].checkIn = true
+            var jsonString = JSON.stringify(data)
+
+            fs.writeFile('./db.json', jsonString, err => {
+                if (err) {
+                    console.log('Error writing file', err)
+                } else {
+                    console.log('Successfully wrote file')
                 }
-                reject(messageError)
+            })
+
+            let message = {
+                statusCode: 200,
+                message: "Login Success",
+                data: acount
             }
 
 
-        })
+            return (message)
+
+
+        } catch (err) {
+            console.log(err)
+            let message = {
+                statusCode: 400,
+                message: "Id is not exist"
+            }
+            return message
+        }
+
+
     }
 
+    count() {
+
+        var count = 0
+
+        try {
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].checkIn) {
+                    console.log(data[i].checkIn)
+                    count += 1
+                }
+            }
+
+            return (count)
 
 
+        } catch (e) {
+            let message = {
+                statusCode: 400,
+                message: e
+            }
+            return message
+        }
+    }
 
 
 }
