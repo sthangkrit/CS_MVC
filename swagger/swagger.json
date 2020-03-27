@@ -1,0 +1,298 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "",
+    "version": "2",
+    "title": "Bank"
+  },
+  "host": "localhost:3000",
+  "tags": [
+    {
+      "name": "Deposit"
+    },
+    {
+      "name": "Withdraw"
+    },
+    {
+      "name": "Transfer"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/Deposit": {
+      "post": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Deposit money to wallet",
+        "description": "Deposit money to wallet",
+        "operationId": "Deposit money to wallet",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "acount",
+            "in": "formData",
+            "description": "Acount Owner",
+            "required": true,
+            "type": "string",
+            "default": "2562-34-21-10001"
+          },
+          {
+            "name": "acount_id",
+            "in": "formData",
+            "description": "password to access acount",
+            "required": true,
+            "type": "string",
+            "default": 6969
+          },
+          {
+            "name": "deposit",
+            "in": "formData",
+            "description": "amount of money you want to deposit",
+            "required": true,
+            "type": "integer",
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Deposit Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Bad Request"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "unAuthenticate",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Fail to Connect Database"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Withdraw": {
+      "post": {
+        "tags": [
+          "Withdraw"
+        ],
+        "summary": "Withdraw money from wallet",
+        "description": "Withdraw money from wallet",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "acount",
+            "in": "formData",
+            "description": "Acount Owner",
+            "required": true,
+            "type": "string",
+            "default": "2562-34-21-10001"
+          },
+          {
+            "name": "acount_id",
+            "in": "formData",
+            "description": "password to access acount",
+            "required": true,
+            "type": "string",
+            "default": 6969
+          },
+          {
+            "name": "withdraw",
+            "in": "formData",
+            "description": "amount of money you want to withdraw",
+            "required": true,
+            "type": "integer",
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Withdraw Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Bad Request"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "unAuthenticate",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Fail to Connect Database"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Transfer": {
+      "post": {
+        "tags": [
+          "Transfer"
+        ],
+        "summary": "Transfer money from wallet to another wallet",
+        "description": "Transfer money from wallet to another wallet",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "acount",
+            "in": "formData",
+            "description": "Acount Owner",
+            "required": true,
+            "type": "string",
+            "default": "2562-34-21-10001"
+          },
+          {
+            "name": "acount_id",
+            "in": "formData",
+            "description": "password to access acount",
+            "required": true,
+            "type": "string",
+            "default": 6969
+          },
+          {
+            "name": "transfer",
+            "in": "formData",
+            "description": "amount of money you want to transfer",
+            "required": true,
+            "type": "integer",
+            "default": 1000
+          },
+          {
+            "name": "sendto",
+            "in": "formData",
+            "description": "Acount Reciver",
+            "required": true,
+            "type": "string",
+            "default": "2562-34-21-10003"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Transfer Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Bad Request"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "unAuthenticate",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "string",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Fail to Connect Database"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
