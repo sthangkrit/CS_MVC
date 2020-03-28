@@ -5,7 +5,9 @@ How to install
 
 2 git clone https://github.com/sthangkrit/MVC_Structure.git
 
-3 npm install
+3 git checkout MVC
+
+4 npm install
 
 
 #How to Run
