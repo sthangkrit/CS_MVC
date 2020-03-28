@@ -54,13 +54,9 @@
             "description": "Created",
             "schema": {
               "properties": {
-                "statusCode": {
-                  "type": "string",
-                  "example": 200
-                },
                 "message": {
                   "type": "string",
-                  "example": null
+                  "example": "Login Success :' เข้าสู่ระบบสำเร็จ'"
                 }
               }
             }
@@ -83,16 +79,12 @@
         ],
         "responses": {
           "200": {
-            "description": "Created",
+            "description": "สร้างรายงาน",
             "schema": {
               "properties": {
-                "statusCode": {
-                  "type": "string",
-                  "example": 200
-                },
                 "message": {
                   "type": "string",
-                  "example": null
+                  "example": "Report Success :'สร้างรายงานสำเร็จ'"
                 }
               }
             }

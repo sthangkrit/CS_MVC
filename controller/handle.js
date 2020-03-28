@@ -17,7 +17,7 @@ if (errdb) {
 class request {
 
     async Login(req) {
-        let functionName = '[login]' //ชื่อ function
+        let functionName = '[Login]' //ชื่อ function
 
         return new Promise(async function (resolve, reject) {
 
@@ -58,6 +58,8 @@ FROM sthangDB.dbo.STUDENTS WHERE SID='${id}' AND Password = '${password}';`
 
 
     async Report() {
+        let functionName = '[Report]' //ชื่อ function
+
         return new Promise(async function (resolve, reject) {
 
             try {
@@ -85,7 +87,7 @@ FROM sthangDB.dbo.STUDENTS WHERE Status = 'false';`
                 resolve(report)
             } catch (err) {
 
-                reject(err)
+                reject(functionName+ ' Fail :  ' +err)
             }
 
 
