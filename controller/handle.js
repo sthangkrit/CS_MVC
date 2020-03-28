@@ -1,5 +1,4 @@
 var sql = require("mssql");
-// var moment = require('moment')
 
 // config for your database
 var config = {
@@ -17,55 +16,40 @@ if (errdb) {
 
 class request {
 
-    async Deposit(req) {
-        let functionName = '[Deposit]' //ชื่อ function
+    async Login(req) {
+        let functionName = '[login]' //ชื่อ function
 
         return new Promise(async function (resolve, reject) {
 
             try {
-
                 var request = new sql.Request();
-                var acount = req.acount
-                // console.log(acount)
-                var acount_id = req.acount_id
-                var deposit = req.deposit
-                var statusCode = 0;
-                var massage = ""
-                var check = `SELECT acount, acount_id
-FROM sthangDB.dbo.BankAcount WHERE acount = '${acount}' AND acount_id ='${acount_id}'; `
+                var id = req.id
+                var password = req.password
+
+
+                const chars = id.split('@');
+
+                if ('@' + chars[1] != '@cskmitl.ac.th') reject( functionName+ ' Fail : รูปแบบ Email ไม่ถูกต้อง')
+
+                id = chars[0]
+
+                var check = `SELECT SID, Password, Firstname, Lastname, Status
+FROM sthangDB.dbo.STUDENTS WHERE SID='${id}' AND Password = '${password}';`
                 var result = await request.query(check);
-                // console.log(result.recordset[0])
-                if ((result.recordset[0]) == undefined) {
-                    statusCode = 400
-                    massage = "Deposit Fail : acount or acount_id is incorect"
-                } else {
-                    if (deposit >= 100) {
-
-                        var command = `UPDATE sthangDB.dbo.BankAcount
-                SET balance+= '${deposit}' WHERE acount = '${acount}' AND acount_id =  '${acount_id}';`
-                        await request.query(command); //ยิง command เข้าไปใน
-                        statusCode = 200
-                        massage = "Deposit Success : Your Deposit " + deposit + " to Wallet"
-
-                    } else {
-                        statusCode = 400
-                        massage = "Deposit Fail : Minimum Deposit is 100 Bath"
-                    }
-                }
 
 
-                let message = {
-                    statusCode: statusCode,
-                    message: massage
-                }
+                if (result.recordset[0] == null) reject(functionName+ ' Fail : Id หรือ Password ไม่ถูกต้อง')
+                if (result.recordset[0].Status == 1) reject(functionName+ ' Fail : คุณอยู่ในระบบอยู่แล้ว')
 
-                resolve(message)
+                var LoginSuccess = ` UPDATE sthangDB.dbo.STUDENTS
+                SET Status = 'true' WHERE SID='${id}' AND Password = '${password}'; `
+                await request.query(LoginSuccess);
+
+                // console.log(result.recordset)
+                resolve(functionName+ ' Success : เข้าสู่ระบบสำเร็จ')
             } catch (err) {
-                let messageError = {
-                    statusCode: err.statusCode || 400,
-                    message: err.message || `${functionName} CREATE failed [Error] ${err}`
-                }
-                reject(messageError)
+
+                reject(functionName+ ' Fail :  ' +err)
             }
 
 
@@ -73,7 +57,40 @@ FROM sthangDB.dbo.BankAcount WHERE acount = '${acount}' AND acount_id ='${acount
     }
 
 
+    async Report() {
+        return new Promise(async function (resolve, reject) {
 
+            try {
+                var request = new sql.Request()
+
+                var count_login = `SELECT COUNT(*) AS count_login
+FROM sthangDB.dbo.STUDENTS WHERE Status = 'true';`
+                var result_login = await request.query(count_login);
+
+                var count_NonLogin = `SELECT COUNT(*) AS count_nonlogin
+FROM sthangDB.dbo.STUDENTS WHERE Status = 'false';`
+                var result_NonLogin = await request.query(count_NonLogin);
+
+                var name_NonLogin = `SELECT Firstname,Lastname
+FROM sthangDB.dbo.STUDENTS WHERE Status = 'false';`
+                var result_NameNonLogin = await request.query(name_NonLogin);
+
+
+                var report = {
+                    "จำนวนผู้เข้าสู่ระบบ": result_login.recordset[0].count_login + ' คน',
+                    "จำนวนผู้ที่ไม่เช้าสู่ระบบ": result_NonLogin.recordset[0].count_nonlogin + ' คน',
+                    "รายชื่อผู้ที่ไม่เข้าสู่ระบบ": result_NameNonLogin.recordset
+                }
+
+                resolve(report)
+            } catch (err) {
+
+                reject(err)
+            }
+
+
+        })
+    }
 
 
 }

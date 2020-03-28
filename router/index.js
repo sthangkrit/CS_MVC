@@ -2,21 +2,35 @@ const express = require('express')
 const app = express()
 const request = require('../controller/handle');
 
-app.get('/test',(req,res)=>{
+app.get('/test', (req, res) => {
     res.send("Hello")
 })
 
-app.post('/FunctionName', async (req, res) => {
+app.post('/Login', async (req, res) => {
     try {
-        // var result = await new request().Deposit(req.body)
-        // res.send(result)
+
+        var result = await new request().Login(req.body)
+        res.status(200)
+        res.send(result)
     } catch (error) {
-        // res.send(error)
+        res.status(400)
+        res.send(error)
     }
 
 })
 
+app.post('/Report', async (req, res) => {
+    try {
+        var result = await new request().Report()
+        res.status(200)
+        res.send(result)
+    } catch (error)
+    {
+        res.status(400)
+        res.send(error)
+    }
 
+})
 
 
 module.exports = app
