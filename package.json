@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/sthangkrit/MVC_Structure#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
     "moment": "^2.24.0",
     "mssql": "^6.2.0",
     "swagger-ui-express": "^4.1.4"
